@@ -1,0 +1,188 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Settings
+ext {
+    project_group = 'com.github.dirkraft.dropwizard'
+    project_version = '0.0.1-SNAPSHOT'
+    project_jdk = '1.7'
+    project_pom = {
+        name 'dropwizard-file-assets'
+        description "Dropwizard FileAssetsBundle - just plain files for pity's sake!"
+        url 'https://github.com/dirkraft/dropwizard-file-assets'
+        licenses {
+            license {
+                name 'MIT License'
+                url 'http://opensource.org/licenses/Apache-2.0'
+                distribution 'repo'
+            }
+        }
+        scm {
+            url 'https://github.com/dirkraft/dropwizard-file-assets.git'
+            connection 'scm:git:https://github.com/dirkraft/dropwizard-file-assets.git'
+            developerConnection 'scm:git:git@github.com:dirkraft/dropwizard-file-assets.git'
+        }
+        developers {
+            developer {
+                id 'dirkraft'
+                name 'Jason Dunkelberger'
+            }
+        }
+    }
+
+    /** Function always returns a new manifest that can be customized */
+    defaultManifest = {
+        return manifest {
+            def git_cmd = "git rev-parse HEAD"
+            def git_proc = git_cmd.execute()
+            attributes 'SCM-Revision': git_proc.text.trim()
+            attributes 'Timestamp': String.valueOf(System.currentTimeMillis())
+            attributes 'Build-Host': InetAddress.localHost.hostName
+        }
+    }
+    
+    defaultBlank = { closure ->
+        try {
+            closure()
+        } catch (MissingPropertyException e) {
+            ''
+        }
+    }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// License
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.10.0'
+    }
+}
+allprojects {
+    apply plugin: 'idea'
+    apply plugin: 'license'
+
+    license {
+        header rootProject.file('src/license/HEADER')
+    }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Identifiers
+
+group = project_group
+version = project_version
+ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Plugins
+
+apply plugin: 'java'
+sourceCompatibility = project_jdk
+targetCompatibility = project_jdk
+
+apply plugin: 'maven'
+apply plugin: 'signing'
+apply plugin: 'idea'
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Dependencies
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'io.dropwizard:dropwizard-core:0.7.1'
+    testCompile 'io.dropwizard:dropwizard-assets:0.7.1'
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Artifacts
+
+jar {
+    doFirst {
+        // Timestamp changes on every build. By evaluating it later, won't needlessly fail up-to-date checks.
+        manifest = defaultManifest()
+    }
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from 'build/docs/javadoc'
+    doFirst {
+        // Timestamp changes on every build. By evaluating it later, won't needlessly fail up-to-date checks.
+        manifest = defaultManifest()
+    }
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+    doFirst {
+        // Timestamp changes on every build. By evaluating it later, won't needlessly fail up-to-date checks.
+        manifest = defaultManifest()
+    }
+}
+
+artifacts {
+    archives jar
+    archives javadocJar
+    archives sourcesJar
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Publishing
+
+assemble {
+    dependsOn licenseFormatMain, licenseFormatTest
+}
+
+signing {
+    required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
+    sign configurations.archives
+}
+
+uploadArchives {
+    dependsOn licenseFormatMain, licenseFormatTest
+    enabled = false // by default, mark individual projects back to true for inclusion in publishing
+
+    repositories.mavenDeployer {
+        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+        //# ./gradlew -PdeployUrl=http://server/artifactory/repo -PdeployUsername=admin -PdeployPassword=pass uploadArchives
+        // for snapshots https://oss.sonatype.org/content/repositories/snapshots
+        // for staging/release https://oss.sonatype.org/service/local/staging/deploy/maven2
+        repository(
+                url: defaultBlank({ deployUrl })
+        ) {
+            // If these are not defined assemble needlessly fails for unrelated tasks, hence, defaultBlank.
+            authentication(userName: defaultBlank({ deployUsername }), password: defaultBlank({ deployPassword }))
+        }
+
+        pom.project project_pom
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Misc
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.2.1'
+}
+
+idea {
+    module {
+        downloadSources = true
+    }
+    project {
+        jdkName = project_jdk
+        languageLevel = project_jdk
+        vcs = 'Git'
+    }
+}
+
