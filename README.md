@@ -59,22 +59,22 @@ Serving out of the classpath the traditional way with standard
 Perhaps you have bundled your static assets in your jar.
 
 ```java
-    @Override
-    public void initialize(Bootstrap<Configuration> bootstrap) {
-        bootstrap.addBundle(new AssetsBundle("/web", "/", "index.html"));
-    }
+@Override
+public void initialize(Bootstrap<Configuration> bootstrap) {
+    bootstrap.addBundle(new AssetsBundle("/web", "/", "index.html"));
+}
 ```
 See a slightly more complete example in TODO
 
 Serving directly from the filesystem thanks to this small module, for instant browser refreshability.
 
 ```java
-    @Override
-    public void initialize(Bootstrap<Configuration> bootstrap) {
-        // This is a relative path, relative to the working directory. If you run this main method in IntelliJ,
-        // by default the working directory is the project root directory.
-        bootstrap.addBundle(new FileAssetsBundle("src/test/resources/web", "/", "index.html"));
-    }
+@Override
+public void initialize(Bootstrap<Configuration> bootstrap) {
+    // This is a relative path, relative to the working directory. If you run this main method in IntelliJ,
+    // by default the working directory is the project root directory.
+    bootstrap.addBundle(new FileAssetsBundle("src/test/resources/web", "/", "index.html"));
+}
 ```
 See a slightly more complete example in TODO
 
