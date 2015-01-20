@@ -21,7 +21,7 @@ Unverified (I use gradle these days)
 Add the Sonatype snapshot repo. See
 [stackoverflow](http://stackoverflow.com/questions/7715321/how-to-download-snapshot-version-from-maven-snapshot-repository)
 
-```maven
+```xml
 <dependency>
 	<groupId>com.github.dirkraft.dropwizard</groupId>
 	<artifactId>dropwizard-file-assets</artifactId>
