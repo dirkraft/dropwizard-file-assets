@@ -16,10 +16,11 @@ central someday, but for now I've loaded enough crapware on there.
 
 
 ### Maven ###
+Unverified (I use gradle these days)
+
 Add the Sonatype snapshot repo. See
 [stackoverflow](http://stackoverflow.com/questions/7715321/how-to-download-snapshot-version-from-maven-snapshot-repository)
 
-Unverified (I use gradle these days)
 ```maven
 <dependency>
 	<groupId>com.github.dirkraft.dropwizard</groupId>
