@@ -67,7 +67,7 @@ public void initialize(Bootstrap<Configuration> bootstrap) {
     bootstrap.addBundle(new AssetsBundle("/web", "/", "index.html"));
 }
 ```
-See a slightly more complete example in https://github.com/dirkraft/dropwizard-file-assets/blob/master/src/test/java/com/github/dirkraft/dropwizard/fileassets/StandardAssetsBundleApp.java
+See a slightly more complete example in [StandardAssetsBundleApp.java](https://github.com/dirkraft/dropwizard-file-assets/blob/master/src/test/java/com/github/dirkraft/dropwizard/fileassets/StandardAssetsBundleApp.java)
 
 Serving directly from the filesystem thanks to this small module, for instant browser refreshability.
 
@@ -81,7 +81,7 @@ public void initialize(Bootstrap<Configuration> bootstrap) {
     bootstrap.addBundle(new FileAssetsBundle("src/test/resources/web", "/", "index.html"));
 }
 ```
-See a slightly more complete example in TODO
+See a slightly more complete example in [FileAssetsBundleApp.java](https://github.com/dirkraft/dropwizard-file-assets/blob/master/src/test/java/com/github/dirkraft/dropwizard/fileassets/FileAssetsBundleApp.java)
 
 If you wanted, you could map it into your custom Configuration, but I don't usually care for that stuff until much
 later, if ever. If you do want that, you should check out
