@@ -59,15 +59,19 @@ Serving out of the classpath the traditional way with standard
 [dropwizard-assets](http://dropwizard.io/manual/core.html#serving-assets).
 Perhaps you have bundled your static assets in your jar.
 
+#### Standard Dropwizard Assets Bundle ####
+
 ```java
 @Override
 public void initialize(Bootstrap<Configuration> bootstrap) {
     bootstrap.addBundle(new AssetsBundle("/web", "/", "index.html"));
 }
 ```
-See a slightly more complete example in TODO
+See a slightly more complete example in https://github.com/dirkraft/dropwizard-file-assets/blob/master/src/test/java/com/github/dirkraft/dropwizard/fileassets/StandardAssetsBundleApp.java
 
 Serving directly from the filesystem thanks to this small module, for instant browser refreshability.
+
+#### Dropwizard File Assets Bundle ####
 
 ```java
 @Override
