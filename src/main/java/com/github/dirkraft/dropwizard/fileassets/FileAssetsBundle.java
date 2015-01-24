@@ -31,7 +31,7 @@ import java.nio.file.Paths;
 public class FileAssetsBundle implements Bundle {
     private static final Logger LOGGER = LoggerFactory.getLogger(FileAssetsBundle.class);
 
-    private static final String DEFAULT_ASSETS_NAME = "assets";
+    private static final String DEFAULT_ASSETS_NAME = "file-assets";
     private static final String DEFAULT_INDEX_FILE = "index.htm";
     private static final String DEFAULT_PATH = "/assets";
 
