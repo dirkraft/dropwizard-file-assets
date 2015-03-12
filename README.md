@@ -1,11 +1,11 @@
 
 dropwizard-file-assets
 ======================
-[![Build Status](https://travis-ci.org/dirkraft/dropwizard-file-assets.svg?branch=master)](https://travis-ci.org/dirkraft/dropwizard-file-assets)
 
 I just want to serve plain files in my Dropwizard app. That's all this does; let you serve files from your file system.
 It has about 0 extra features.
 
+[![Build Status](https://travis-ci.org/dirkraft/dropwizard-file-assets.svg?branch=master)](https://travis-ci.org/dirkraft/dropwizard-file-assets)
 
 
 
