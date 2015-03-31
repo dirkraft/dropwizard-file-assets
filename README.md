@@ -25,7 +25,7 @@ Add the Sonatype snapshot repo. See
 <dependency>
 	<groupId>com.github.dirkraft.dropwizard</groupId>
 	<artifactId>dropwizard-file-assets</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 </dependency>
 
 ```
@@ -36,13 +36,11 @@ Add the Sonatype snapshot repo. See
 apply plugin: 'maven'
 
 repositories {
-    maven {
-        url 'https://oss.sonatype.org/content/repositories/snapshots/'
-    }
+    mavenCentral()
 }
 
 dependencies {
-    compile 'com.github.dirkraft.dropwizard:dropwizard-file-assets:0.0.1-SNAPSHOT'
+    compile 'com.github.dirkraft.dropwizard:dropwizard-file-assets:0.0.1'
 }
 ```
 
