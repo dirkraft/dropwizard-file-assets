@@ -11,8 +11,7 @@ It has about 0 extra features.
 
 ## Dependency ##
 
-Add the dependency which is currently only hosted on Sonatype's gracious snapshot repository. Maybe I will push to maven
-central someday, but for now I've loaded enough crapware on there.
+Add the dependency from Maven central.
 
 
 ### Maven ###
