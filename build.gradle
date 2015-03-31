@@ -161,7 +161,7 @@ uploadArchives {
                 url: defaultBlank({ deployUrl })
         ) {
             // If these are not defined assemble needlessly fails for unrelated tasks, hence, defaultBlank.
-            authentication(userName: defaultBlank({ deployUsername }), password: defaultBlank({ deployPassword }))
+            authentication(userName: defaultBlank({ deployUser }), password: defaultBlank({ deployPass }))
         }
 
         pom.project project_pom
