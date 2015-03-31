@@ -5,5 +5,5 @@ env:
     - secure: "R/SDuVHqSRt6lhP5ieFqlpjB8hLmFQYA+WGzna78LCAeNePwcZvM4u55tnuRAGekIs38mGLdW9yKssKH51LTDhzioHjZMmd+aSHBb8A7xeTqUZJNcL+hq+Cf5pOt7NJ5R0E1HY4StrqlZIZQpd4axCcRom8vyhr8t1BNFw5eipY="
     - secure: "e+Fp5fsX/WCvU77ela7g289nu+CiQhx79LaPsv0TTF6W+uzuCAxQF8tMiAvKXik8k++zO1Iop/Uzbc7KUd97ISq1hp9I01eRp6kEYguDt1tTF+OKl0IhlwMIo9/L3HMaLl4Ugi0h/2gLp30xsLXB7jRLefvDbD6IvEuJ/cDX+Wk="
 
-after_success: ./gradlew -PdeployUrl=https://oss.sonatype.org/content/repositories/snapshots/ -PdeployUsername=$SNAPSHOT_USER -PdeployPassword=$SNAPSHOT_AUTH uploadArchives
+after_success: ./gradlew -PdeployUrl=https://oss.sonatype.org/content/repositories/snapshots/ -PdeployUser=$SNAPSHOT_USER -PdeployPass=$SNAPSHOT_AUTH uploadArchives
 
