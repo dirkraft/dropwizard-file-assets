@@ -2,7 +2,7 @@
 // Settings
 ext {
     project_group = 'com.github.dirkraft.dropwizard'
-    project_version = '0.0.1'
+    project_version = '0.0.2-SNAPSHOT'
     project_jdk = '1.7'
     project_pom = {
         name 'dropwizard-file-assets'
