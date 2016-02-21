@@ -5,7 +5,7 @@ ext {
     github_org = 'dirkraft'
     project_name = 'dropwizard-file-assets'
     artifact_group = 'com.github.' + github_org + '.' + project_name
-    project_version = '0.0.1-SNAPSHOT'
+    project_version = '0.0.2'
     project_description = "Dropwizard FileAssetsBundle - just plain files for pity's sake!"
     project_jdk = '1.7'
 
@@ -181,7 +181,7 @@ signing {
 
 uploadArchives {
     dependsOn licenseFormatMain, licenseFormatTest
-    enabled = false // by default. Mark individual projects back to true for inclusion in publishing.
+    enabled = true
 
     repositories.mavenDeployer {
         beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
