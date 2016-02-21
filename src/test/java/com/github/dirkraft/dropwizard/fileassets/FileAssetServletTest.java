@@ -15,7 +15,6 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
 public class FileAssetServletTest {
@@ -35,6 +34,16 @@ public class FileAssetServletTest {
 
     @Test
     public void testOk() throws ServletException, IOException, URISyntaxException {
+        when(request.getPathInfo()).thenReturn("/index.html");
+
+        servlet.doGet(request, response);
+
+        byte[] expectedContent = Files.readAllBytes(Paths.get(getClass().getResource("/web/index.html").toURI()));
+        verifyOkResponse(expectedContent);
+    }
+
+    @Test
+    public void testOkIndex() throws ServletException, IOException, URISyntaxException {
         when(request.getPathInfo()).thenReturn("/");
 
         servlet.doGet(request, response);
@@ -48,6 +57,14 @@ public class FileAssetServletTest {
      */
     @Test
     public void test404() throws ServletException, IOException {
+        servlet.doGet(request, response);
+        verifyErrorResponse(HttpStatus.NOT_FOUND_404);
+    }
+
+    @Test
+    public void test404NoIndex() throws ServletException, IOException {
+        when(request.getPathInfo()).thenReturn("/subdir/");
+
         servlet.doGet(request, response);
         verifyErrorResponse(HttpStatus.NOT_FOUND_404);
     }
