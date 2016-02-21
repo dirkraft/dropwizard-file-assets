@@ -1,34 +1,60 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Settings
 ext {
-    project_group = 'com.github.dirkraft.dropwizard'
-    project_version = '0.0.2-SNAPSHOT'
+    // Project constants
+    github_org = 'dirkraft'
+    project_name = 'dropwizard-file-assets'
+    artifact_group = 'com.github.' + github_org + '.' + project_name
+    project_version = '0.0.1-SNAPSHOT'
+    project_description = "Dropwizard FileAssetsBundle - just plain files for pity's sake!"
     project_jdk = '1.7'
+
+    /*
+     * Dependencies can be named so that sub-projects can reference consistent version of them.
+     * dependencies {
+     *     compile deps['guava']
+     * }
+     */
+    deps = [
+            'dropwizard-core'  : 'io.dropwizard:dropwizard-core:0.7.1',
+            'dropwizard-assets': 'io.dropwizard:dropwizard-assets:0.7.1',
+            'junit'            : 'junit:junit:4.12',
+            'mockito-core'     : 'org.mockito:mockito-core:2.0.42-beta',
+    ]
+
+    /*
+     * Fine tune the POM contents here, particularly, the developers section. Some defaulting behavior is provided
+     * for all other fields based on project constants.
+     */
     project_pom = {
-        name 'dropwizard-file-assets'
-        description "Dropwizard FileAssetsBundle - just plain files for pity's sake!"
-        url 'https://github.com/dirkraft/dropwizard-file-assets'
+        name project_name
+        description project_description
+        url "https://github.com/${github_org}/${project_name}"
         licenses {
             license {
                 name 'MIT License'
-                url 'http://opensource.org/licenses/Apache-2.0'
+                url 'http://opensource.org/licenses/MIT'
                 distribution 'repo'
             }
         }
         scm {
-            url 'https://github.com/dirkraft/dropwizard-file-assets.git'
-            connection 'scm:git:https://github.com/dirkraft/dropwizard-file-assets.git'
-            developerConnection 'scm:git:git@github.com:dirkraft/dropwizard-file-assets.git'
+            url "https://github.com/${github_org}/${project_name}.git"
+            connection "scm:git:https://github.com/${github_org}/${project_name}.git"
+            developerConnection "scm:git:git@github.com:${github_org}/${project_name}.git"
+        }
+        organization {
+            name github_org
+            url "https://github.com/${github_org}"
         }
         developers {
             developer {
-                id 'dirkraft'
-                name 'Jason Dunkelberger'
+                id 'developer'
+                name 'developer'
             }
         }
     }
 
-    /** Function always returns a new manifest that can be customized */
+    /** Function returns a new manifest that can be customized per module */
     defaultManifest = {
         return manifest {
             def git_cmd = "git rev-parse HEAD"
@@ -38,7 +64,8 @@ ext {
             attributes 'Build-Host': InetAddress.localHost.hostName
         }
     }
-    
+
+    /** Used where gradle task evaluation would fail because of an undefined value, even if the task wasn't targeted. */
     defaultBlank = { closure ->
         try {
             closure()
@@ -46,48 +73,51 @@ ext {
             ''
         }
     }
+
 }
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// License
 
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
     }
 
     dependencies {
-        classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.10.0'
-    }
-}
-allprojects {
-    apply plugin: 'idea'
-    apply plugin: 'license'
-
-    license {
-        header rootProject.file('src/license/HEADER')
+        classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0'
     }
 }
 
+apply plugin: 'idea'
+apply plugin: 'license'
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Identifiers
 
-group = project_group
+group = artifact_group
 version = project_version
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Plugins
 
-apply plugin: 'java'
+apply plugin: 'groovy'
 sourceCompatibility = project_jdk
 targetCompatibility = project_jdk
 
 apply plugin: 'maven'
 apply plugin: 'signing'
 apply plugin: 'idea'
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// License
+
+license {
+    header rootProject.file('src/license/HEADER')
+}
+
+assemble {
+    dependsOn licenseFormatMain, licenseFormatTest
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Dependencies
@@ -97,8 +127,10 @@ repositories {
 }
 
 dependencies {
-    compile 'io.dropwizard:dropwizard-core:0.7.1'
-    testCompile 'io.dropwizard:dropwizard-assets:0.7.1'
+    compile deps['dropwizard-core']
+    testCompile deps['dropwizard-assets']
+    testCompile deps['junit']
+    testCompile deps['mockito-core']
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -149,12 +181,12 @@ signing {
 
 uploadArchives {
     dependsOn licenseFormatMain, licenseFormatTest
-    enabled = true
+    enabled = false // by default. Mark individual projects back to true for inclusion in publishing.
 
     repositories.mavenDeployer {
         beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-        //# ./gradlew -PdeployUrl=http://server/artifactory/repo -PdeployUsername=admin -PdeployPassword=pass uploadArchives
+        //# ./gradlew -PdeployUrl=http://server/artifactory/repo -PdeployUser=admin -PdeployPass=pass uploadArchives
         // for snapshots https://oss.sonatype.org/content/repositories/snapshots
         // for staging/release https://oss.sonatype.org/service/local/staging/deploy/maven2
         repository(
@@ -172,7 +204,8 @@ uploadArchives {
 // Misc
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.2.1'
+    gradleVersion = '2.10'
+    distributionUrl = 'https://services.gradle.org/distributions/gradle-2.10-all.zip'
 }
 
 idea {
@@ -185,4 +218,3 @@ idea {
         vcs = 'Git'
     }
 }
-

@@ -189,6 +189,11 @@ public class FileAssetServlet extends HttpServlet {
         // zero out the millis since the date we get back from If-Modified-Since will not have them
         lastModified = (lastModified / 1000) * 1000;
         LOG.debug("Attempting to read file {}", requestedResourceFile.getAbsolutePath());
+
+        if (!requestedResourceFile.exists()) {
+            // doGet will translate a null CachedAsset return into 404
+            return null;
+        }
         return new CachedAsset(Files.toByteArray(requestedResourceFile), lastModified);
     }
 
