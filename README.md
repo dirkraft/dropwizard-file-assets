@@ -21,7 +21,7 @@ Unverified (I use gradle these days)
 <dependency>
 	<groupId>com.github.dirkraft.dropwizard</groupId>
 	<artifactId>dropwizard-file-assets</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 </dependency>
 
 ```
@@ -36,7 +36,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.dirkraft.dropwizard:dropwizard-file-assets:0.0.1'
+    compile 'com.github.dirkraft.dropwizard:dropwizard-file-assets:0.0.2'
 }
 ```
 
