@@ -4,7 +4,7 @@ ext {
     // Project constants
     github_org = 'dirkraft'
     project_name = 'dropwizard-file-assets'
-    artifact_group = 'com.github.' + github_org + '.' + project_name
+    artifact_group = 'com.github.dirkraft.dropwizard'
     project_version = '0.0.2'
     project_description = "Dropwizard FileAssetsBundle - just plain files for pity's sake!"
     project_jdk = '1.7'
