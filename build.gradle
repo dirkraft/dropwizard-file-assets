@@ -32,8 +32,8 @@ ext {
         url "https://github.com/${github_org}/${project_name}"
         licenses {
             license {
-                name 'MIT License'
-                url 'http://opensource.org/licenses/MIT'
+                name 'Apache License, v2.0'
+                url 'https://www.apache.org/licenses/LICENSE-2.0'
                 distribution 'repo'
             }
         }
@@ -48,8 +48,8 @@ ext {
         }
         developers {
             developer {
-                id 'developer'
-                name 'developer'
+                id 'dirkraft'
+                name 'Jason Dunkelberger'
             }
         }
     }
