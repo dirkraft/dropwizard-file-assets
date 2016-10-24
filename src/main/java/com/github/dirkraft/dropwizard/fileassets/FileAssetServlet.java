@@ -1,18 +1,18 @@
 /**
  * Copyright 2010-2013 Coda Hale and Yammer, Inc.
  * Copyright 2015-2016 Jason Dunkelberger (a.k.a. dirkraft)
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.github.dirkraft.dropwizard.fileassets;
 
@@ -97,7 +97,9 @@ public class FileAssetServlet extends HttpServlet {
                             String indexFile,
                             Charset defaultCharset) {
         final String trimmedPath = SLASHES.trimFrom(filePath);
-        this.resourcePath = trimmedPath.isEmpty() ? trimmedPath : trimmedPath + '/';
+        // Restore a single leading slash if argument seems to want absolute path.
+        String absolutePathPrefix = filePath.startsWith("/") ? "/" : "";
+        this.resourcePath = absolutePathPrefix + (trimmedPath.isEmpty() ? trimmedPath : trimmedPath + '/');
         final String trimmedUri = SLASHES.trimTrailingFrom(uriPath);
         this.uriPath = trimmedUri.isEmpty() ? "/" : trimmedUri;
         this.indexFile = indexFile;
@@ -148,7 +150,8 @@ public class FileAssetServlet extends HttpServlet {
                     if (defaultCharset != null && mediaType.is(MediaType.ANY_TEXT_TYPE)) {
                         mediaType = mediaType.withCharset(defaultCharset);
                     }
-                } catch (IllegalArgumentException ignore) {}
+                } catch (IllegalArgumentException ignore) {
+                }
             }
 
             resp.setContentType(mediaType.type() + '/' + mediaType.subtype());
@@ -168,7 +171,9 @@ public class FileAssetServlet extends HttpServlet {
     private CachedAsset loadAsset(String key) throws URISyntaxException, IOException {
         checkArgument(key.startsWith(uriPath));
         final String requestedResourcePath = SLASHES.trimFrom(key.substring(uriPath.length()));
-        final String combinedRequestedResourcePath = SLASHES.trimFrom(this.resourcePath + requestedResourcePath);
+        // Don't lose that absolutism.
+        String absolutePathPrefix = this.resourcePath.startsWith("/") ? "/" : "";
+        final String combinedRequestedResourcePath = absolutePathPrefix + SLASHES.trimFrom(this.resourcePath + requestedResourcePath);
 
         File requestedResourceFile = new File(combinedRequestedResourcePath);
         if (requestedResourceFile.isDirectory()) {
