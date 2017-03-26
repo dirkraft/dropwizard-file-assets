@@ -47,7 +47,7 @@ dependencies {
 
 This thing was mostly spurred on by development (I use IntelliJ for everything). I want to be able to refresh my browser
 rather than have to constantly restart dropwizard. I usually end up with two main methods: one for production and one
-for development. But there's no reason you couldn't also use this in production to serve files from the file system.
+for development. The right thing to do in production is serve static assets through nginx. The lazy thing to do is anything else, such as serving them directly from your java application.
 
 Serving out of the classpath the traditional way with standard
 [dropwizard-assets](http://dropwizard.io/manual/core.html#serving-assets).
